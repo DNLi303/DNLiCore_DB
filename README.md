@@ -26,7 +26,12 @@ DNLiCore_DB 是属于DNLiCore框架下的一个数据库工具类,目标支持�
        DNLiCore_DI.ServiceContext.GetService<IMySqlHelper>().ExecuteSql(); //执行sql    
 2.使用ORM:Petapoco  
   2.1 在Startup.cs 进行服务注入    
-      services.AddSingleton(typeof(DNLiCore_DB.IPetaPocoHelper), new DNLiCore_DB.PetaPocoHelper(Configuration.GetConnectionString("MySqlConnection"), 0));  //0代表 mysql    
+      services.AddTransient<DNLiCore_DB.IPetaPocoHelper>(factor =>
+            {
+                DNLiCore_DB.PetaPocoHelper sqlHelper =
+                    new PetaPocoHelper(Configuration.GetConnectionString("MySqlConnection"), 0);//0代表 mysql    
+                return sqlHelper;
+            });  
   2.2 在需要引用的地方进行构造注入引用，或者安装DNLiCore_DI框架可以在任意地方调用，例如:      
        DNLiCore_DI.ServiceContext.GetService<IPetaPocoHelper>().FirstOrDefault(); //查询实体    
 3.使用EF Core    
@@ -50,7 +55,12 @@ DNLiCore_DB 是属于DNLiCore框架下的一个数据库工具类,目标支持�
        DNLiCore_DI.ServiceContext.GetService<ISqlServerHelper>().ExecuteSql(); //执行sql  
 2.使用ORM:Petapoco  
   2.1 在Startup.cs 进行服务注入  
-      services.AddSingleton(typeof(DNLiCore_DB.IPetaPocoHelper), new DNLiCore_DB.PetaPocoHelper(Configuration.GetConnectionString("SqlServerConnection"), 1));   //1代表 sqlserver    
+        services.AddTransient<DNLiCore_DB.IPetaPocoHelper>(factor =>
+            {
+                DNLiCore_DB.PetaPocoHelper sqlHelper =
+                    new PetaPocoHelper(Configuration.GetConnectionString("SqlServerConnection"), 1); //1代表 sqlserver       
+                return sqlHelper;
+            });    
   2.2 在需要引用的地方进行构造注入引用，或者安装DNLiCore_DI框架可以在任意地方调用，例如:    
        DNLiCore_DI.ServiceContext.GetService<IPetaPocoHelper>().FirstOrDefault(); //查询实体  
 3.使用EF Core  
@@ -74,6 +84,11 @@ DNLiCore_DB 是属于DNLiCore框架下的一个数据库工具类,目标支持�
        DNLiCore_DI.ServiceContext.GetService<ISqlLiteHelper>().ExecuteSql(); //执行sql  
 2.使用ORM:Petapoco  
   2.1 在Startup.cs 进行服务注入  
-      services.AddSingleton(typeof(DNLiCore_DB.IPetaPocoHelper), new DNLiCore_DB.PetaPocoHelper(Configuration.GetConnectionString("SqlLiteConnection"), 2));   //1代表 sqllite    
+     services.AddTransient<DNLiCore_DB.IPetaPocoHelper>(factor =>
+            {
+                DNLiCore_DB.PetaPocoHelper sqlHelper =
+                    new PetaPocoHelper(Configuration.GetConnectionString("SqlLiteConnection"), 2); ////2代表 sqllite  
+                return sqlHelper;
+            });           
   2.2 在需要引用的地方进行构造注入引用，或者安装DNLiCore_DI框架可以在任意地方调用，例如:    
        DNLiCore_DI.ServiceContext.GetService<IPetaPocoHelper>().FirstOrDefault(); //查询实体  
